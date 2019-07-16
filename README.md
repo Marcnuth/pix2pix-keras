@@ -24,5 +24,4 @@ pip install requirements.txt
 python main.py 
 ```    
 
-### About this implementation  
-A full write-up about this implementation is available at my blog [https://www.williamfalcon.com/deeplearningimplementations/pix2pix-keras](https://www.williamfalcon.com/deeplearningimplementations/pix2pix-keras)
+

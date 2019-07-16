@@ -84,9 +84,6 @@ def UNETGenerator(input_img_dim, num_output_channels):
     stride = 2
     merge_mode = 'concat'
 
-    # batch norm mode
-    bn_mode = 2
-
     # batch norm merge axis
     bn_axis = 1
 
@@ -99,37 +96,37 @@ def UNETGenerator(input_img_dim, num_output_channels):
 
     # 2 encoder C128
     en_2 = Convolution2D(nb_filter=128, nb_row=4, nb_col=4, border_mode='same', subsample=(stride, stride))(en_1)
-    en_2 = BatchNormalization(name='gen_en_bn_2', mode=bn_mode, axis=bn_axis)(en_2)
+    en_2 = BatchNormalization(name='gen_en_bn_2', axis=bn_axis)(en_2)
     en_2 = LeakyReLU(alpha=0.2)(en_2)
 
     # 3 encoder C256
     en_3 = Convolution2D(nb_filter=256, nb_row=4, nb_col=4, border_mode='same', subsample=(stride, stride))(en_2)
-    en_3 = BatchNormalization(name='gen_en_bn_3', mode=bn_mode, axis=bn_axis)(en_3)
+    en_3 = BatchNormalization(name='gen_en_bn_3', axis=bn_axis)(en_3)
     en_3 = LeakyReLU(alpha=0.2)(en_3)
 
     # 4 encoder C512
     en_4 = Convolution2D(nb_filter=512, nb_row=4, nb_col=4, border_mode='same', subsample=(stride, stride))(en_3)
-    en_4 = BatchNormalization(name='gen_en_bn_4', mode=bn_mode, axis=bn_axis)(en_4)
+    en_4 = BatchNormalization(name='gen_en_bn_4', axis=bn_axis)(en_4)
     en_4 = LeakyReLU(alpha=0.2)(en_4)
 
     # 5 encoder C512
     en_5 = Convolution2D(nb_filter=512, nb_row=4, nb_col=4, border_mode='same', subsample=(stride, stride))(en_4)
-    en_5 = BatchNormalization(name='gen_en_bn_5', mode=bn_mode, axis=bn_axis)(en_5)
+    en_5 = BatchNormalization(name='gen_en_bn_5', axis=bn_axis)(en_5)
     en_5 = LeakyReLU(alpha=0.2)(en_5)
 
     # 6 encoder C512
     en_6 = Convolution2D(nb_filter=512, nb_row=4, nb_col=4, border_mode='same', subsample=(stride, stride))(en_5)
-    en_6 = BatchNormalization(name='gen_en_bn_6', mode=bn_mode, axis=bn_axis)(en_6)
+    en_6 = BatchNormalization(name='gen_en_bn_6', axis=bn_axis)(en_6)
     en_6 = LeakyReLU(alpha=0.2)(en_6)
 
     # 7 encoder C512
     en_7 = Convolution2D(nb_filter=512, nb_row=4, nb_col=4, border_mode='same', subsample=(stride, stride))(en_6)
-    en_7 = BatchNormalization(name='gen_en_bn_7', mode=bn_mode, axis=bn_axis)(en_7)
+    en_7 = BatchNormalization(name='gen_en_bn_7', axis=bn_axis)(en_7)
     en_7 = LeakyReLU(alpha=0.2)(en_7)
 
     # 8 encoder C512
     en_8 = Convolution2D(nb_filter=512, nb_row=4, nb_col=4, border_mode='same', subsample=(stride, stride))(en_7)
-    en_8 = BatchNormalization(name='gen_en_bn_8', mode=bn_mode, axis=bn_axis)(en_8)
+    en_8 = BatchNormalization(name='gen_en_bn_8', axis=bn_axis)(en_8)
     en_8 = LeakyReLU(alpha=0.2)(en_8)
 
     # -------------------------------
@@ -141,7 +138,7 @@ def UNETGenerator(input_img_dim, num_output_channels):
     # 1 decoder CD512 (decodes en_8)
     de_1 = UpSampling2D(size=(2, 2))(en_8)
     de_1 = Convolution2D(nb_filter=512, nb_row=4, nb_col=4, border_mode='same')(de_1)
-    de_1 = BatchNormalization(name='gen_de_bn_1', mode=bn_mode, axis=bn_axis)(de_1)
+    de_1 = BatchNormalization(name='gen_de_bn_1', axis=bn_axis)(de_1)
     de_1 = Dropout(p=0.5)(de_1)
     de_1 = merge([de_1, en_7], mode=merge_mode, concat_axis=1)
     de_1 = Activation('relu')(de_1)
@@ -149,7 +146,7 @@ def UNETGenerator(input_img_dim, num_output_channels):
     # 2 decoder CD1024 (decodes en_7)
     de_2 = UpSampling2D(size=(2, 2))(de_1)
     de_2 = Convolution2D(nb_filter=1024, nb_row=4, nb_col=4, border_mode='same')(de_2)
-    de_2 = BatchNormalization(name='gen_de_bn_2', mode=bn_mode, axis=bn_axis)(de_2)
+    de_2 = BatchNormalization(name='gen_de_bn_2', axis=bn_axis)(de_2)
     de_2 = Dropout(p=0.5)(de_2)
     de_2 = merge([de_2, en_6], mode=merge_mode, concat_axis=1)
     de_2 = Activation('relu')(de_2)
@@ -157,7 +154,7 @@ def UNETGenerator(input_img_dim, num_output_channels):
     # 3 decoder CD1024 (decodes en_6)
     de_3 = UpSampling2D(size=(2, 2))(de_2)
     de_3 = Convolution2D(nb_filter=1024, nb_row=4, nb_col=4, border_mode='same')(de_3)
-    de_3 = BatchNormalization(name='gen_de_bn_3', mode=bn_mode, axis=bn_axis)(de_3)
+    de_3 = BatchNormalization(name='gen_de_bn_3', axis=bn_axis)(de_3)
     de_3 = Dropout(p=0.5)(de_3)
     de_3 = merge([de_3, en_5], mode=merge_mode, concat_axis=1)
     de_3 = Activation('relu')(de_3)
@@ -165,7 +162,7 @@ def UNETGenerator(input_img_dim, num_output_channels):
     # 4 decoder CD1024 (decodes en_5)
     de_4 = UpSampling2D(size=(2, 2))(de_3)
     de_4 = Convolution2D(nb_filter=1024, nb_row=4, nb_col=4, border_mode='same')(de_4)
-    de_4 = BatchNormalization(name='gen_de_bn_4', mode=bn_mode, axis=bn_axis)(de_4)
+    de_4 = BatchNormalization(name='gen_de_bn_4', axis=bn_axis)(de_4)
     de_4 = Dropout(p=0.5)(de_4)
     de_4 = merge([de_4, en_4], mode=merge_mode, concat_axis=1)
     de_4 = Activation('relu')(de_4)
@@ -173,7 +170,7 @@ def UNETGenerator(input_img_dim, num_output_channels):
     # 5 decoder CD1024 (decodes en_4)
     de_5 = UpSampling2D(size=(2, 2))(de_4)
     de_5 = Convolution2D(nb_filter=1024, nb_row=4, nb_col=4, border_mode='same')(de_5)
-    de_5 = BatchNormalization(name='gen_de_bn_5', mode=bn_mode, axis=bn_axis)(de_5)
+    de_5 = BatchNormalization(name='gen_de_bn_5', axis=bn_axis)(de_5)
     de_5 = Dropout(p=0.5)(de_5)
     de_5 = merge([de_5, en_3], mode=merge_mode, concat_axis=1)
     de_5 = Activation('relu')(de_5)
@@ -181,7 +178,7 @@ def UNETGenerator(input_img_dim, num_output_channels):
     # 6 decoder C512 (decodes en_3)
     de_6 = UpSampling2D(size=(2, 2))(de_5)
     de_6 = Convolution2D(nb_filter=512, nb_row=4, nb_col=4, border_mode='same')(de_6)
-    de_6 = BatchNormalization(name='gen_de_bn_6', mode=bn_mode, axis=bn_axis)(de_6)
+    de_6 = BatchNormalization(name='gen_de_bn_6', axis=bn_axis)(de_6)
     de_6 = Dropout(p=0.5)(de_6)
     de_6 = merge([de_6, en_2], mode=merge_mode, concat_axis=1)
     de_6 = Activation('relu')(de_6)
@@ -189,7 +186,7 @@ def UNETGenerator(input_img_dim, num_output_channels):
     # 7 decoder CD256 (decodes en_2)
     de_7 = UpSampling2D(size=(2, 2))(de_6)
     de_7 = Convolution2D(nb_filter=256, nb_row=4, nb_col=4, border_mode='same')(de_7)
-    de_7 = BatchNormalization(name='gen_de_bn_7', mode=bn_mode, axis=bn_axis)(de_7)
+    de_7 = BatchNormalization(name='gen_de_bn_7', axis=bn_axis)(de_7)
     de_7 = Dropout(p=0.5)(de_7)
     de_7 = merge([de_7, en_1], mode=merge_mode, concat_axis=1)
     de_7 = Activation('relu')(de_7)
